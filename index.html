@@ -93,7 +93,7 @@
     // Serve o link normal da planilha (com acesso "Qualquer pessoa com o link: Leitor")
     // ou o link CSV de "Arquivo > Compartilhar > Publicar na Web". Se o link vier de uma
     // aba específica (termina em #gid=...), essa aba é usada; senão, a primeira.
-    planilha: "https://docs.google.com/spreadsheets/d/1mWSnaTyH_S2qUyrP3NEo8gEjFJy_YxAkkFDS8qRz7Xc/edit",
+    planilha: "https://docs.google.com/spreadsheets/d/1Td33LcRFpo2XsR8SrqgtkgUsjraTWS6An2WWu6v-beE/edit?usp=sharing",
     mensagem: "Olá! Quero um orçamento.", // texto que já vem escrito no WhatsApp
     ddi: "55"                             // código do país usado quando o número vem sem ele
   };
@@ -199,7 +199,7 @@
     if (/\/d\/e\//.test(link)) return link;                  // link de "Publicar na Web": já é o CSV
     const id = (link.match(/\/d\/([\w-]+)/) || [, link.trim()])[1];  // aceita o link inteiro ou só o ID
     const gid = (link.match(/[#&?]gid=(\d+)/) || [])[1];
-    return "https://docs.google.com/spreadsheets/d/" + id + "/gviz/tq?tqx=out:csv" + (gid ? "&gid=" + gid : "");
+    return "https://docs.google.com/spreadsheets/d/" + id + "/gviz/tq?tqx=out:csv&headers=1" + (gid ? "&gid=" + gid : "");
   }
 
   async function carregar() {
