@@ -8,55 +8,70 @@
 <style>
   :root {
     --bg: #f7f8fa; --surface: #ffffff; --text: #18202e; --muted: #667085;
-    --line: #e6e8ec; --head: #f9fafb; --focus: #1f3864;
-    --wa: #0f7d41; --wa-hover: #0b6634;
+    --line: #e6e8ec; --focus: #1f3864; --wa: #0f7d41; --wa-hover: #0b6634;
   }
   * { box-sizing: border-box; }
   body {
     margin: 0; background: var(--bg); color: var(--text);
     font: 16px/1.5 system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
   }
-  .page { max-width: 1040px; margin: 0 auto; padding: 56px 24px 72px; }
-  h1 { margin: 0 0 28px; font-size: 1.75rem; line-height: 1.2; letter-spacing: -0.01em; }
+  .page { max-width: 1240px; margin: 0 auto; padding: 0 32px 72px; }
+  h1 { margin: 0; padding: 48px 0 12px; font-size: 1.75rem; line-height: 1.2; letter-spacing: -0.01em; }
 
-  .bar { display: flex; align-items: center; gap: 16px; margin-bottom: 14px; }
-  .search {
-    flex: 1; padding: 12px 16px; font: inherit; color: var(--text);
-    background: var(--surface); border: 1px solid var(--line); border-radius: 10px;
+  /* Barra de busca e filtro: fica visível enquanto a lista rola */
+  .bar {
+    position: sticky; top: 0; z-index: 5; background: var(--bg);
+    display: flex; align-items: center; gap: 14px; padding: 12px 0 16px;
   }
-  .search:focus-visible, .btn:focus-visible { outline: 3px solid var(--focus); outline-offset: 2px; }
-  .count { color: var(--muted); font-size: .9rem; white-space: nowrap; min-width: 90px; text-align: right; }
-
-  .table-wrap { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; overflow: clip; }
-  table { width: 100%; border-collapse: collapse; }
-  th {
-    position: sticky; top: 0; background: var(--head); text-align: left;
-    padding: 12px 20px; font-size: .75rem; font-weight: 600; letter-spacing: .06em;
-    text-transform: uppercase; color: var(--muted); border-bottom: 1px solid var(--line);
+  .search, .filtro {
+    padding: 12px 16px; font: inherit; color: var(--text); background: var(--surface);
+    border: 1px solid var(--line); border-radius: 10px;
   }
-  td { padding: 14px 20px; border-bottom: 1px solid var(--line); vertical-align: middle; }
-  tbody tr:last-child td { border-bottom: 0; }
-  tbody tr:hover { background: #fbfcfd; }
-  .nome { font-weight: 600; }
-  .esp { color: var(--muted); }
-  .tel { font-variant-numeric: tabular-nums; white-space: nowrap; }
-  .acao { text-align: right; white-space: nowrap; }
+  .search { flex: 1; min-width: 0; }
+  .filtro { width: 300px; max-width: 40%; min-width: 0; }
+  .search:focus-visible, .filtro:focus-visible, .btn:focus-visible, .mais:focus-visible {
+    outline: 3px solid var(--focus); outline-offset: 2px;
+  }
+  .count { color: var(--muted); font-size: .9rem; white-space: nowrap; min-width: 96px; text-align: right; }
 
+  .grid { display: grid; gap: 16px; grid-template-columns: repeat(auto-fill, minmax(270px, 1fr)); }
+  .card {
+    background: var(--surface); border: 1px solid var(--line); border-radius: 14px;
+    padding: 18px; display: flex; flex-direction: column; gap: 4px; min-width: 0;
+    transition: border-color .15s, box-shadow .15s;
+  }
+  .card:hover { border-color: #cfd4dc; box-shadow: 0 4px 14px rgba(24, 32, 46, .06); }
+  .esp { font-size: .78rem; font-weight: 600; color: var(--muted); overflow-wrap: anywhere; }
+  .card h2 { margin: 0; font-size: 1.05rem; line-height: 1.3; overflow-wrap: anywhere; }
+  .tel { color: var(--muted); font-variant-numeric: tabular-nums; overflow-wrap: anywhere; }
+  .acao { margin-top: auto; padding-top: 14px; }
   .btn {
-    display: inline-block; padding: 8px 16px; border-radius: 8px; background: var(--wa);
-    color: #fff; text-decoration: none; font-size: .9rem; font-weight: 600;
+    display: block; text-align: center; padding: 10px 14px; border-radius: 8px;
+    background: var(--wa); color: #fff; text-decoration: none; font-size: .92rem; font-weight: 600;
     transition: background .15s;
   }
   .btn:hover { background: var(--wa-hover); }
-  .sem { color: var(--muted); font-size: .9rem; }
+  .sem {
+    display: block; text-align: center; padding: 10px 14px; border-radius: 8px;
+    background: #f1f2f4; color: var(--muted); font-size: .92rem;
+  }
 
-  .status { padding: 48px 20px; text-align: center; color: var(--muted); }
+  .status { padding: 64px 0; text-align: center; color: var(--muted); }
   .status:empty { display: none; }
+  .mais {
+    display: block; margin: 28px auto 0; padding: 11px 24px; font: inherit; font-weight: 600;
+    color: var(--focus); background: var(--surface); border: 1px solid var(--line);
+    border-radius: 10px; cursor: pointer;
+  }
+  .mais:hover { border-color: #cfd4dc; }
+  .mais[hidden] { display: none; }
 
   @media (max-width: 720px) {
-    .page { padding: 28px 16px 48px; }
-    .tel-col { display: none; }
-    th, td { padding-left: 12px; padding-right: 12px; }
+    .page { padding: 0 16px 48px; }
+    h1 { padding-top: 28px; }
+    .bar { flex-wrap: wrap; gap: 10px; }
+    .search { flex-basis: 100%; }
+    .filtro { flex: 1; max-width: none; width: auto; }
   }
 </style>
 </head>
@@ -66,23 +81,13 @@
 
   <div class="bar">
     <input id="busca" class="search" type="search" placeholder="Buscar por nome ou especialidade" aria-label="Buscar prestadores" autocomplete="off">
+    <select id="filtro" class="filtro" aria-label="Filtrar por especialidade"></select>
     <div id="contagem" class="count" aria-live="polite"></div>
   </div>
 
-  <div class="table-wrap">
-    <table>
-      <thead>
-        <tr>
-          <th scope="col">Nome</th>
-          <th scope="col">Especialidade</th>
-          <th scope="col" class="tel-col">Telefone</th>
-          <th scope="col"><span style="position:absolute;left:-9999px">Ação</span></th>
-        </tr>
-      </thead>
-      <tbody id="linhas"></tbody>
-    </table>
-    <div id="status" class="status">Carregando…</div>
-  </div>
+  <div id="cards" class="grid"></div>
+  <div id="status" class="status">Carregando…</div>
+  <button id="mais" class="mais" type="button" hidden></button>
 </main>
 
 <script>
@@ -95,13 +100,16 @@
     // aba específica (termina em #gid=...), essa aba é usada; senão, a primeira.
     planilha: "https://docs.google.com/spreadsheets/d/1Td33LcRFpo2XsR8SrqgtkgUsjraTWS6An2WWu6v-beE/edit?usp=sharing",
     mensagem: "Olá! Quero um orçamento.", // texto que já vem escrito no WhatsApp
-    ddi: "55"                             // código do país usado quando o número vem sem ele
+    ddi: "55",                            // código do país usado quando o número vem sem ele
+    porPagina: 60                         // quantos cards aparecem antes de "Mostrar mais"
   };
   // ============================================
 
   const CACHE_KEY = "prestadores-cache-v2";
+  const TODAS = "";
   const $ = (id) => document.getElementById(id);
   let todos = [];
+  let visiveis = CONFIG.porPagina;
 
   document.title = CONFIG.titulo;
   $("titulo").textContent = CONFIG.titulo;
@@ -168,11 +176,13 @@
     return n;
   }
 
-  function linhaDaTabela(p) {
+  function cartao(p) {
     const numero = numeroWhatsApp(p.tel);
-    const tr = el("tr");
-    tr.append(el("td", "nome", p.nome), el("td", "esp", p.esp), el("td", "tel tel-col", exibirTelefone(p.tel, numero)));
-    const acao = el("td", "acao");
+    const card = el("article", "card");
+    if (p.esp) card.append(el("div", "esp", p.esp));
+    card.append(el("h2", null, p.nome));
+    if (p.tel) card.append(el("div", "tel", exibirTelefone(p.tel, numero)));
+    const acao = el("div", "acao");
     if (numero) {
       const a = el("a", "btn", "Orçamento no WhatsApp");
       a.href = "https://wa.me/" + numero + "?text=" + encodeURIComponent(CONFIG.mensagem);
@@ -180,19 +190,47 @@
       a.setAttribute("aria-label", "Pedir orçamento a " + p.nome + " pelo WhatsApp");
       acao.append(a);
     } else acao.append(el("span", "sem", "Sem WhatsApp"));
-    tr.append(acao);
-    return tr;
+    card.append(acao);
+    return card;
+  }
+
+  function filtrar() {
+    const q = norm($("busca").value), esp = $("filtro").value;
+    return todos.filter((p) =>
+      (esp === TODAS || p.esp === esp) &&
+      (!q || norm(p.nome + " " + p.esp + " " + p.tel.replace(/\D/g, "")).includes(q)));
   }
 
   function desenhar() {
-    const q = norm($("busca").value);
-    const lista = todos.filter((p) => !q || norm(p.nome + " " + p.esp + " " + p.tel.replace(/\D/g, "")).includes(q));
-    $("linhas").replaceChildren(...lista.map(linhaDaTabela));
+    const lista = filtrar();
+    const parte = lista.slice(0, visiveis);
+    const resto = lista.length - parte.length;
+    $("cards").replaceChildren(...parte.map(cartao));
     $("contagem").textContent = lista.length === 1 ? "1 prestador" : lista.length + " prestadores";
+    $("mais").hidden = resto <= 0;
+    $("mais").textContent = "Mostrar mais (" + resto + ")";
     $("status").textContent = lista.length ? "" : (todos.length ? "Nenhum prestador encontrado." : "A lista ainda está vazia.");
   }
 
-  function usar(csv) { todos = lerPrestadores(lerCSV(csv)); desenhar(); }
+  // Preenche o filtro com as especialidades da planilha e a quantidade de cada uma.
+  function preencherFiltro() {
+    const atual = $("filtro").value;
+    const contagem = new Map();
+    todos.forEach((p) => p.esp && contagem.set(p.esp, (contagem.get(p.esp) || 0) + 1));
+    const nomes = [...contagem.keys()].sort((a, b) => a.localeCompare(b, "pt-BR"));
+    const opcao = (valor, texto) => { const o = el("option", null, texto); o.value = valor; return o; };
+    $("filtro").replaceChildren(
+      opcao(TODAS, "Todas as especialidades"),
+      ...nomes.map((n) => opcao(n, n + " (" + contagem.get(n) + ")")));
+    $("filtro").value = contagem.has(atual) ? atual : TODAS;
+  }
+
+  function usar(csv) {
+    todos = lerPrestadores(lerCSV(csv));
+    visiveis = CONFIG.porPagina;
+    preencherFiltro();
+    desenhar();
+  }
 
   // Transforma o link colado em CONFIG.planilha no endereço que devolve os dados em CSV.
   function urlDosDados(link) {
@@ -219,7 +257,10 @@
     }
   }
 
-  $("busca").addEventListener("input", desenhar);
+  const refazer = () => { visiveis = CONFIG.porPagina; desenhar(); };
+  $("busca").addEventListener("input", refazer);
+  $("filtro").addEventListener("change", refazer);
+  $("mais").addEventListener("click", () => { visiveis += CONFIG.porPagina; desenhar(); });
   carregar();
 </script>
 </body>
